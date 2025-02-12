@@ -1,0 +1,19 @@
+﻿.inventory-box {
+    overflow-y: auto;
+    max-height: 300px;
+    border: 1px solid silver;
+}
+
+.inventory-list {
+    list-style-type: none;
+    margin-left: -20px;
+    margin-top: 20px;
+}
+
+.inventory-list li {
+    cursor: pointer;
+}
+
+.selected {
+    background-color: antiquewhite
+}

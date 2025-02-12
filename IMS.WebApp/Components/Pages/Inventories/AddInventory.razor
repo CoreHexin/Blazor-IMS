@@ -1,0 +1,45 @@
+﻿@page "/inventory/add"
+
+@using IMS.CoreBusiness
+@using IMS.UseCases.Inventories.Interfaces
+
+@inject IAddInventoryUseCase AddInventoryUserCase
+@inject NavigationManager NavigationManager
+
+<h3>Add Inventory</h3>
+
+<EditForm Model="Inventory" FormName="addInventoryForm" OnValidSubmit="Add">
+    <DataAnnotationsValidator />
+
+    <div class="form-group mb-3">
+        <label for="name">Inventory Name</label>
+        <InputText id="name" @bind-Value=Inventory.Name class="form-control" />
+        <ValidationMessage For="() => Inventory.Name" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="quantity">Quantity</label>
+        <InputNumber id="quantity" @bind-Value=Inventory.Quantity class="form-control" />
+        <ValidationMessage For="() => Inventory.Quantity" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="price">Price</label>
+        <InputNumber id="price" @bind-Value=Inventory.Price class="form-control" />
+        <ValidationMessage For="() => Inventory.Price" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+    <a href="/inventories" class="btn btn-primary">Cancel</a>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    public Inventory Inventory { get; set; } = new Inventory();
+
+    private async Task Add()
+    {
+        await AddInventoryUserCase.ExecuteAsync(Inventory);
+        NavigationManager.NavigateTo("/inventories");
+    }
+}

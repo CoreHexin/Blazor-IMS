@@ -1,0 +1,24 @@
+﻿@if (NameForSearch is null)
+{
+    NameForSearch = string.Empty;
+}
+
+<EditForm Enhance="true" Model="NameForSearch" FormName="formForSearch" OnSubmit="Search" class="mb-3">
+    <div class="input-group">
+        <InputText class="form-control" placeholder="输入查询名称" @bind-Value=NameForSearch />
+        <button type="submit" class="btn-success input-group-text">查询</button>
+    </div>
+</EditForm>
+
+@code {
+    [SupplyParameterFromForm]
+    private string NameForSearch { get; set; } = string.Empty;
+
+    [Parameter]
+    public EventCallback<string> SearchCallback { get; set; }
+
+    private void Search() 
+    {
+        SearchCallback.InvokeAsync(NameForSearch);
+    }
+}

@@ -1,0 +1,67 @@
+﻿@page "/product/edit/{id:int}"
+@rendermode InteractiveServer
+
+@using IMS.CoreBusiness
+@using IMS.UseCases.Products.Interfaces
+@using IMS.WebApp.Components.Controls.Products
+
+@inject NavigationManager NavigationManager
+@inject IViewProductByIdUseCase ViewProductByIdUseCase
+@inject IEditProductUseCase EditProductUseCase
+
+<h3>Edit Product</h3>
+
+@if (product is not null)
+{
+    <EditForm Model="product" OnValidSubmit="Update">
+        <DataAnnotationsValidator />
+
+        <div class="form-group mb-3">
+            <label for="name">Product Name</label>
+            <InputText id="name" @bind-Value=product.Name class="form-control" />
+            <ValidationMessage For="() => product.Name" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="quantity">Quantity</label>
+            <InputNumber id="quantity" @bind-Value=product.Quantity class="form-control" />
+            <ValidationMessage For="() => product.Quantity" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="price">Price</label>
+            <InputNumber id="price" @bind-Value=product.Price class="form-control" />
+            <ValidationMessage For="() => product.Price" />
+            <ValidationMessage For="() => product.ProductInventories" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="price">Inventories</label>
+            <ProductInventoriesComponent Product="product" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">更新</button>
+        <a href="/products" class="btn btn-primary">取消</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product? product;
+
+    protected override async Task OnInitializedAsync()
+    {
+        product = await ViewProductByIdUseCase.ExecuteAsync(Id);
+    }
+
+    private async Task Update()
+    {
+        if (product is not null)
+        {
+            await EditProductUseCase.ExecuteAsync(product);
+            NavigationManager.NavigateTo("/products");
+        }
+    }
+}

@@ -1,0 +1,40 @@
+﻿@using IMS.CoreBusiness
+@using IMS.UseCases.Products.Interfaces
+
+@inject IViewProductsByNameUseCase ViewProductsByNameUseCase
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (products is not null && products.Any())
+        {
+            foreach (var product in products)
+            {
+                <ProductListItemComponent Product=product @rendermode=InteractiveServer />
+            }
+        }
+    </tbody>
+</table>
+
+
+
+@code {
+    private List<Product>? products;
+
+    [Parameter]
+    public string NameForSearch { get; set; } = string.Empty;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        products = (await ViewProductsByNameUseCase.ExecuteAsync(NameForSearch)).ToList();
+    }
+
+}

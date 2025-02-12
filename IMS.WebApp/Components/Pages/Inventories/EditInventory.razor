@@ -1,0 +1,62 @@
+﻿@page "/inventory/edit/{id:int}"
+
+@using IMS.CoreBusiness
+@using IMS.UseCases.Inventories.Interfaces
+
+@inject IViewInventoryByIdUseCase ViewInventoryByIdUseCase
+@inject IEditInventoryUseCase EditInventoryUseCase
+@inject NavigationManager NavigationManager
+
+<h3>Edit Inventory @Id</h3>
+
+@if (_inventory is not null)
+{
+    <EditForm Model="_inventory" FormName="updateInventoryForm" OnValidSubmit="UpdateInventory">
+        <DataAnnotationsValidator />
+
+        <InputNumber @bind-Value=_inventory.Id hidden />
+
+        <div class="form-group mb-3">
+            <label for="name">Inventory Name</label>
+            <InputText id="name" @bind-Value=_inventory.Name class="form-control" />
+            <ValidationMessage For="() => _inventory.Name" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="quantity">Quantity</label>
+            <InputNumber id="quantity" @bind-Value=_inventory.Quantity class="form-control" />
+            <ValidationMessage For="() => _inventory.Quantity" />
+        </div>
+
+        <div class="form-group mb-3">
+            <label for="price">Price</label>
+            <InputNumber id="price" @bind-Value=_inventory.Price class="form-control" />
+            <ValidationMessage For="() => _inventory.Price" />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="/inventories" class="btn btn-primary">Cancel</a>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Inventory? _inventory { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        _inventory ??= await ViewInventoryByIdUseCase.ExecuteAsync(Id);
+    }
+
+    private async Task UpdateInventory()
+    {
+        if (_inventory is not null)
+        {
+            await EditInventoryUseCase.ExecuteAsync(_inventory);
+            NavigationManager.NavigateTo("/inventories");
+        }
+    }
+}

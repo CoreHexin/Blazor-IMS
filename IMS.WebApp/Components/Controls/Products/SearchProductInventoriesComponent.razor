@@ -1,0 +1,56 @@
+﻿@using IMS.CoreBusiness
+@using IMS.UseCases.Inventories.Interfaces
+
+@inject IViewInventoriesByNameUseCase ViewInventoriesByNameUseCase
+
+<div class="input-group mb-3">
+    <input class="form-control" placeholder="输入查询名称" @bind-value=NameForSearch @bind-value:event="oninput" />
+    <button type="button" class="btn-success input-group-text" @onclick=Search>查询</button>
+</div>
+
+@if (inventories is not null && inventories.Any())
+{
+    <div class="inventory-box">
+        <ul class="inventory-list">
+            @foreach (var inventory in inventories)
+            {
+                <li @key=inventory.Id @onclick="() => HandleInventorySelected(inventory)" >
+                    @inventory.Name
+                </li>
+            }
+        </ul>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public EventCallback<Inventory> InventorySelectCallback { get; set; }
+
+    private string _nameForSearch = string.Empty;
+
+    public string NameForSearch
+    {
+        get { return _nameForSearch; }
+        set 
+        { 
+            _nameForSearch = value;
+            Search();
+        }
+    }
+
+    private List<Inventory> inventories = new List<Inventory>();
+
+    private async Task Search()
+    {
+        await Task.Delay(200);  // 模拟耗时操作
+        inventories = (await ViewInventoriesByNameUseCase.ExecuteAsync(NameForSearch)).ToList();
+        StateHasChanged();
+    }
+
+    private async Task HandleInventorySelected(Inventory inventory)
+    {
+        await InventorySelectCallback.InvokeAsync(inventory);
+        inventories.Clear();
+    }
+}

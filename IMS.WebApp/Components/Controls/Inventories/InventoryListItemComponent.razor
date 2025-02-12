@@ -1,0 +1,41 @@
+﻿@using IMS.CoreBusiness
+@using IMS.UseCases.Inventories
+@using IMS.UseCases.Inventories.Interfaces
+
+@inject NavigationManager NavigationManager
+@inject IDeleteInventoryByIdUserCase DeleteInventoryByIdUserCase
+
+@if (Inventory is not null)
+{
+    <tr>
+        <td>@Inventory.Name</td>
+        <td>@Inventory.Quantity</td>
+        <td>@Inventory.Price.ToString("c")</td>
+        <td>
+            <a href="/inventory/edit/@Inventory.Id" class="btn btn-light">Edit</a>
+        </td>
+        <td>
+            <EditForm 
+                Enhance="true"
+                Model="Inventory" 
+                FormName=@($"formForDeleteInventory-{Inventory.Id}") 
+                OnValidSubmit="DeleteInventory">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </EditForm>
+        </td>
+    </tr>
+}
+
+@code {
+    [Parameter]
+    public Inventory? Inventory { get; set; }
+
+    private async Task DeleteInventory()
+    {
+        if (Inventory is not null)
+        {
+            await DeleteInventoryByIdUserCase.ExecuteAsync(Inventory.Id);
+            NavigationManager.Refresh();
+        }
+    }
+}
