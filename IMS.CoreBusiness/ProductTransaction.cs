@@ -2,7 +2,7 @@
 
 namespace IMS.CoreBusiness
 {
-    public class InventoryTransaction
+    public class ProductTransaction
     {
         public int Id { get; set; }
 
@@ -10,7 +10,7 @@ namespace IMS.CoreBusiness
         public string ProductionNumber { get; set; } = string.Empty;
 
         [Required]
-        public int InventoryId { get; set; }
+        public int ProductId { get; set; }
 
         [Required]
         public int QuantityBefore { get; set; }
@@ -18,7 +18,7 @@ namespace IMS.CoreBusiness
         [Required]
         public int QuantityAfter { get; set; }
 
-        public double UnitPrice { get; set; }
+        public double? UnitPrice { get; set; }
 
         [Required]
         public DateTime TransactionDate { get; set; }
@@ -27,8 +27,9 @@ namespace IMS.CoreBusiness
         public string DoneBy { get; set; } = string.Empty;
 
         [Required]
-        public InventoryTransactionType ActivityType { get; set; }
+        public ProductionTransactionType ActivityType { get; set; }
 
-        public Inventory? Inventory { get; set; }
+        public Product? Product { get; set; }
+
     }
 }
