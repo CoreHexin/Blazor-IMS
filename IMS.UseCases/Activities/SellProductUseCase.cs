@@ -18,13 +18,18 @@ namespace IMS.UseCases.Activities
             _productRepository = productRepository;
         }
 
-        public async Task ExecuteAsync(string orderNumber, Product product, int quantity, string doneBy)
+        public async Task ExecuteAsync(
+            string orderNumber,
+            Product product,
+            int quantity,
+            decimal unitPrice,
+            string doneBy
+        )
         {
-            await _productTransactionRepository.SellAsync(orderNumber, product, quantity, doneBy);
+            await _productTransactionRepository.SellAsync(orderNumber, product, quantity, unitPrice, doneBy);
 
             product.Quantity -= quantity;
             await _productRepository.UpdateAsync(product);
         }
-
     }
 }

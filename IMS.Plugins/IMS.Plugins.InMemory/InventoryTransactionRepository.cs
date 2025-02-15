@@ -7,7 +7,7 @@ namespace IMS.Plugins.InMemory
     {
         private List<InventoryTransaction> _inventoryTransaction = new List<InventoryTransaction>();
 
-        public async Task ProduceAsync(string productionNumber, Inventory inventory, int quantityToConsume, string doneBy, double price)
+        public async Task ProduceAsync(string productionNumber, Inventory inventory, int quantityToConsume, string doneBy, decimal price)
         {
             _inventoryTransaction.Add(new InventoryTransaction
             {
@@ -24,7 +24,7 @@ namespace IMS.Plugins.InMemory
             await Task.CompletedTask;
         }
 
-        public async Task PurchaseAsync(string orderNumber, Inventory inventory, int quantity, string doneBy, double price)
+        public async Task PurchaseAsync(string orderNumber, Inventory inventory, int quantity, string doneBy, decimal price)
         {
             _inventoryTransaction.Add(new InventoryTransaction
             {

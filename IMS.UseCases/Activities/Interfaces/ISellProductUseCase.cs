@@ -4,6 +4,6 @@ namespace IMS.UseCases.Activities.Interfaces
 {
     public interface ISellProductUseCase
     {
-        Task ExecuteAsync(string orderNumber, Product product, int quantity, string doneBy);
+        Task ExecuteAsync(string orderNumber, Product product, int quantity, decimal unitPrice, string doneBy);
     }
 }

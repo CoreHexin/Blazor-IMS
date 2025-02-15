@@ -22,7 +22,7 @@ namespace IMS.CoreBusiness.Validations
             return ValidationResult.Success;
         }
 
-        private double CalculateTotalInventoriesCost(Product product)
+        private decimal CalculateTotalInventoriesCost(Product product)
         {
             if (product is null || product.ProductInventories.Count() == 0)
                 return 0;

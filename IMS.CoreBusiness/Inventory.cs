@@ -14,6 +14,6 @@ namespace IMS.CoreBusiness
         public int Quantity { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "单价必须大于等于0")]
-        public double Price { get; set; }
+        public Decimal Price { get; set; }
     }
 }

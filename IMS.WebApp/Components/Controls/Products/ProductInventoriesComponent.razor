@@ -23,7 +23,7 @@
                             </td>
                             <td>
                                 <button type="button" class="btn btn-danger"
-                                        @onclick="() => RemoveInventory(productInventory)">
+                                @onclick="() => RemoveInventory(productInventory)">
                                     删除
                                 </button>
                             </td>
@@ -40,9 +40,10 @@
     [Parameter]
     public Product? Product { get; set; }
 
-    private async Task RemoveInventory(ProductInventory productInventory)
+    private Task RemoveInventory(ProductInventory productInventory)
     {
         Product?.RemoveInventory(productInventory);
+        return Task.CompletedTask;
     }
 
     private void HandleInventorySelected(Inventory inventory)
