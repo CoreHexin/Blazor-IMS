@@ -26,7 +26,7 @@
     public string Label { get; set; } = string.Empty;
 
     [Parameter]
-    public Func<string, List<ItemViewModel>>? SearchFunction { get; set; }
+    public Func<string, Task<List<ItemViewModel>?>>? SearchFunction { get; set; }
 
     [Parameter]
     public EventCallback<ItemViewModel?> SelectedCallback { get; set; }
@@ -45,16 +45,22 @@
         get { return _userInput; }
         set 
         { 
-            _userInput = value; 
-            if (!string.IsNullOrWhiteSpace(_userInput) && SearchFunction is not null)
-            {
-                searchResults = SearchFunction(_userInput);
-            }
-            else
-            {
-                SelectedCallback.InvokeAsync(null);
-                ClearHightlighting();
-            }
+            _userInput = value;
+            ViewItemsAsync();
+        }
+    }
+
+    private async Task ViewItemsAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(_userInput) && SearchFunction is not null)
+        {
+            searchResults = await SearchFunction(_userInput);
+            // StateHasChanged();
+        }
+        else
+        {
+            await SelectedCallback.InvokeAsync(null);
+            ClearHightlighting();
         }
     }
 
