@@ -21,7 +21,7 @@ namespace IMS.WebApp.ViewModelValidations
                 {
                     return new ValidationResult(
                         $"原材料 {pi.Inventory.Name} 数量不足", 
-                        new List<string>() { validationContext.MemberName }
+                        [validationContext.MemberName!]
                     );
                 }
             }

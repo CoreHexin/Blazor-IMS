@@ -1,4 +1,5 @@
 ﻿using IMS.CoreBusiness;
+using IMS.WebApp.ViewModelValidations;
 using System.ComponentModel.DataAnnotations;
 
 namespace IMS.WebApp.ViewModels
@@ -12,6 +13,7 @@ namespace IMS.WebApp.ViewModels
         public int ProductId { get; set; }
 
         [Range(1, int.MaxValue, ErrorMessage = "不是一个有效的产品数量")]
+        [Sell_EnsureEnoughProductQuantity]
         public int QuantityToSell { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "不是一个有效的价格")]
