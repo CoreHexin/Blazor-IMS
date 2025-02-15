@@ -4,6 +4,6 @@ namespace IMS.UseCases.Reports.Interfaces
 {
     public interface ISearchProductTransactionsUseCase
     {
-        Task<IEnumerable<ProductTransaction>> ExecuteAsync(string productName, DateTime? dateFrom, DateTime? dateTo, ProductionTransactionType? transactionType);
+        Task<IEnumerable<ProductTransaction>> ExecuteAsync(string productName, DateTime? dateFrom, DateTime? dateTo, ProductTransactionType? transactionType);
     }
 }

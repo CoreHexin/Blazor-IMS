@@ -27,7 +27,7 @@ namespace IMS.CoreBusiness
         public string DoneBy { get; set; } = string.Empty;
 
         [Required]
-        public ProductionTransactionType ActivityType { get; set; }
+        public ProductTransactionType ActivityType { get; set; }
 
         public Product? Product { get; set; }
 

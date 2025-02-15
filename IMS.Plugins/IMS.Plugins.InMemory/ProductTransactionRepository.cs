@@ -63,7 +63,7 @@ namespace IMS.Plugins.InMemory
                     QuantityAfter = product.Quantity + quantity,
                     TransactionDate = DateTime.Now,
                     DoneBy = doneBy,
-                    ActivityType = ProductionTransactionType.ProduceProduct,
+                    ActivityType = ProductTransactionType.ProduceProduct,
                 }
             );
         }
@@ -72,7 +72,7 @@ namespace IMS.Plugins.InMemory
             string productName,
             DateTime? dateFrom,
             DateTime? dateTo,
-            ProductionTransactionType? transactionType
+            ProductTransactionType? transactionType
         )
         {
             var products = await _productRepository.GetByNameAsync(productName);
@@ -132,7 +132,7 @@ namespace IMS.Plugins.InMemory
                     UnitPrice = unitPrice,
                     TransactionDate = DateTime.Now,
                     DoneBy = doneBy,
-                    ActivityType = ProductionTransactionType.SellProduct,
+                    ActivityType = ProductTransactionType.SellProduct,
                 }
             );
             await Task.CompletedTask;

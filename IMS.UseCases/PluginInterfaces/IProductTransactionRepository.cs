@@ -10,7 +10,7 @@ namespace IMS.UseCases.PluginInterfaces
             string productName,
             DateTime? dateFrom,
             DateTime? dateTo,
-            ProductionTransactionType? transactionType
+            ProductTransactionType? transactionType
         );
 
         Task SellAsync(

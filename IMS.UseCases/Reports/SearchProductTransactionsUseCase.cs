@@ -19,7 +19,7 @@ namespace IMS.UseCases.Reports
             string productName,
             DateTime? dateFrom,
             DateTime? dateTo,
-            ProductionTransactionType? transactionType
+            ProductTransactionType? transactionType
         )
         {
             if (dateTo is not null)

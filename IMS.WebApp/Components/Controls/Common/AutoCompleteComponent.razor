@@ -55,7 +55,7 @@
         if (!string.IsNullOrWhiteSpace(_userInput) && SearchFunction is not null)
         {
             searchResults = await SearchFunction(_userInput);
-            // StateHasChanged();
+            StateHasChanged();
         }
         else
         {
