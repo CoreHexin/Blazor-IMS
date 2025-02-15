@@ -56,7 +56,7 @@ namespace IMS.Plugins.InMemory
                 query = query.Where(x => x.TransactionDate <= dateTo);
             }
 
-            return query;
+            return query.OrderByDescending(x => x.TransactionDate); ;
         }
 
         public async Task ProduceAsync(
