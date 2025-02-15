@@ -13,7 +13,7 @@ namespace IMS.Plugins.InMemory
             _inventoryRepository = inventoryRepository;
         }
 
-        public async Task<IEnumerable<InventoryTransaction>> GetTransactionsAsync(
+        public async Task<IEnumerable<InventoryTransaction>> SearchAsync(
             string inventoryName,
             DateTime? dateFrom,
             DateTime? dateTo,

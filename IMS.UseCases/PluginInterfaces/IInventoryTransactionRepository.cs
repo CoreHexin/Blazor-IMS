@@ -20,7 +20,7 @@ namespace IMS.UseCases.PluginInterfaces
             decimal price
         );
 
-        Task<IEnumerable<InventoryTransaction>> GetTransactionsAsync(
+        Task<IEnumerable<InventoryTransaction>> SearchAsync(
             string inventoryName,
             DateTime? dateFrom,
             DateTime? dateTo,
