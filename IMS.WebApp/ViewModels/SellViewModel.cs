@@ -17,7 +17,7 @@ namespace IMS.WebApp.ViewModels
         public int QuantityToSell { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "不是一个有效的价格")]
-        public Decimal UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; }
 
         public Product? Product { get; set; }
     }

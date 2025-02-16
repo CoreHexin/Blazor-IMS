@@ -13,6 +13,6 @@ namespace IMS.WebApp.ViewModels
         [Range(1, int.MaxValue)]
         public int QuantityToPurchase { get; set; }
 
-        public Decimal InventoryPrice { get; set; }
+        public decimal InventoryPrice { get; set; }
     }
 }
