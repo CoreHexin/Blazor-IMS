@@ -4,88 +4,96 @@
 @using IMS.CoreBusiness
 @using IMS.UseCases.Reports.Interfaces
 
+@inject IJSRuntime JSRuntime
 @inject ISearchProductTransactionsUseCase SearchProductTransactionsUseCase
 
 <h3 class="mb-3">产品交易报表</h3>
 
-<div class="row mb-5">
-    <div class="col">
-        <label for="productName">产品名称</label>
-        <input type="text" id="productName" class="form-control" @bind-value="productName" />
+<div id="print-area">
+    <div class="row mb-5">
+        <div class="col">
+            <label for="productName">产品名称</label>
+            <input type="text" id="productName" class="form-control" @bind-value="productName" />
+        </div>
+
+        <div class="col">
+            <label for="dateFrom">查询开始时间</label>
+            <input type="date" id="dateFrom" class="form-control" @bind-value="dateFrom" />
+        </div>
+
+        <div class="col">
+            <label for="dateTo">查询结束时间</label>
+            <input type="date" id="dateFrom" class="form-control" @bind-value="dateTo" />
+        </div>
+
+        <div class="col">
+            <label for="activityType">交易类型</label>
+            <select id="activityType" class="form-select" @bind="activityTypeId">
+                <option value="0">所有类型</option>
+                <option value="1">生产</option>
+                <option value="2">销售</option>
+            </select>
+        </div>
+
+        <div class="col">
+            <label></label>
+            <button type="button" class="btn btn-primary form-control" @onclick="SearchTransactions">搜索</button>
+        </div>
+
+        <div class="col">
+            <label></label>
+            <button type="button" class="btn btn-primary form-control" @onclick="Print">打印</button>
+        </div>
     </div>
 
-    <div class="col">
-        <label for="dateFrom">查询开始时间</label>
-        <input type="date" id="dateFrom" class="form-control" @bind-value="dateFrom" />
-    </div>
+    @if (isLoading)
+    {
+        <p>Loading</p>
+    }
 
-    <div class="col">
-        <label for="dateTo">查询结束时间</label>
-        <input type="date" id="dateFrom" class="form-control" @bind-value="dateTo" />
-    </div>
-
-    <div class="col">
-        <label for="activityType">交易类型</label>
-        <select id="activityType" class="form-select" @bind="activityTypeId">
-            <option value="0">所有类型</option>
-            <option value="1">生产</option>
-            <option value="2">销售</option>
-        </select>
-    </div>
-
-    <div class="col">
-        <label for="searchBtn"></label>
-        <button id="searchBtn" type="button" class="btn btn-primary form-control" @onclick="SearchTransactions">搜索</button>
-    </div>
-</div>
-
-@if (isLoading)
-{
-    <p>Loading</p>
-}
-
-@if (productTransactions is not null && productTransactions.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>交易日期</th>
-                <th>产品名称</th>
-                <th>交易类型</th>
-                <th>产品单价</th>
-                <th>交易前库存数量</th>
-                <th>交易后库存数量</th>
-                <th>生产编号</th>
-                <th>销售编号</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in productTransactions)
-            {
+    @if (productTransactions is not null && productTransactions.Any())
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.TransactionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>@item.Product!.Name</td>
-                    <td>
-                        @if (item.ActivityType == ProductTransactionType.ProduceProduct)
-                        {
-                            <text>生产</text>
-                        }
-                        else
-                        {
-                            <text>销售</text>
-                        }
-                    </td>
-                    <td>@item.UnitPrice</td>
-                    <td>@item.QuantityBefore</td>
-                    <td>@item.QuantityAfter</td>
-                    <td>@item.ProductionNumber</td>
-                    <td>@item.OrderNumber</td>
+                    <th>交易日期</th>
+                    <th>产品名称</th>
+                    <th>交易类型</th>
+                    <th>产品单价</th>
+                    <th>交易前库存数量</th>
+                    <th>交易后库存数量</th>
+                    <th>生产编号</th>
+                    <th>销售编号</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in productTransactions)
+                {
+                    <tr>
+                        <td>@item.TransactionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@item.Product!.Name</td>
+                        <td>
+                            @if (item.ActivityType == ProductTransactionType.ProduceProduct)
+                            {
+                                <text>生产</text>
+                            }
+                            else
+                            {
+                                <text>销售</text>
+                            }
+                        </td>
+                        <td>@item.UnitPrice</td>
+                        <td>@item.QuantityBefore</td>
+                        <td>@item.QuantityAfter</td>
+                        <td>@item.ProductionNumber</td>
+                        <td>@item.OrderNumber</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 
+</div>
 
 
 @code {
@@ -111,5 +119,10 @@
             productName, dateFrom, dateTo, activityType);
 
         isLoading = false;
+    }
+
+    private async Task Print()
+    {
+        await JSRuntime.InvokeVoidAsync("print");
     }
 }

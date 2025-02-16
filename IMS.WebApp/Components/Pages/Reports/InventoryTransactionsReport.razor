@@ -4,80 +4,89 @@
 @using IMS.CoreBusiness
 @using IMS.UseCases.Reports.Interfaces
 
+@inject IJSRuntime JSRuntime
 @inject ISearchInventoryTransactionsUseCase SearchInventoryTransactionsUseCase
 
 <h3 class="mb-3">物料交易报表</h3>
 
-<div class="row mb-5">
-    <div class="col">
-        <label for="inventoryName">物料名称</label>
-        <input type="text" id="inventoryName" class="form-control" @bind-value="inventoryName" />
+<div id="print-area">
+    <div class="row mb-5">
+        <div class="col">
+            <label for="inventoryName">物料名称</label>
+            <input type="text" id="inventoryName" class="form-control" @bind-value="inventoryName" />
+        </div>
+
+        <div class="col">
+            <label for="dateFrom">查询开始时间</label>
+            <input type="date" id="dateFrom" class="form-control" @bind-value="dateFrom" />
+        </div>
+
+        <div class="col">
+            <label for="dateTo">查询结束时间</label>
+            <input type="date" id="dateFrom" class="form-control" @bind-value="dateTo" />
+        </div>
+
+        <div class="col">
+            <label for="activityType">交易类型</label>
+            <select id="activityType" class="form-select" @bind="activityTypeId">
+                <option value="0">所有类型</option>
+                <option value="1">入库</option>
+                <option value="2">出库</option>
+            </select>
+        </div>
+
+        <div class="col">
+            <label for="searchBtn"></label>
+            <button id="searchBtn" type="button" class="btn btn-primary form-control" @onclick="SearchTransactions">搜索</button>
+        </div>
+
+        <div class="col">
+            <label></label>
+            <button type="button" class="btn btn-primary form-control" @onclick="Print">打印</button>
+        </div>
     </div>
 
-    <div class="col">
-        <label for="dateFrom">查询开始时间</label>
-        <input type="date" id="dateFrom" class="form-control" @bind-value="dateFrom" />
-    </div>
-
-    <div class="col">
-        <label for="dateTo">查询结束时间</label>
-        <input type="date" id="dateFrom" class="form-control" @bind-value="dateTo" />
-    </div>
-
-    <div class="col">
-        <label for="activityType">交易类型</label>
-        <select id="activityType" class="form-select" @bind="activityTypeId">
-            <option value="0">所有类型</option>
-            <option value="1">入库</option>
-            <option value="2">出库</option>
-        </select>
-    </div>
-
-    <div class="col">
-        <label for="searchBtn"></label>
-        <button id="searchBtn" type="button" class="btn btn-primary form-control" @onclick="SearchTransactions">搜索</button>
-    </div>
-</div>
-
-@if (inventoryTransactions is not null && inventoryTransactions.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>交易日期</th>
-                <th>物料名称</th>
-                <th>交易类型</th>
-                <th>交易前库存数量</th>
-                <th>交易后库存数量</th>
-                <th>采购编号</th>
-                <th>生产编号</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in inventoryTransactions)
-            {
+    @if (inventoryTransactions is not null && inventoryTransactions.Any())
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@item.TransactionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                    <td>@item.Inventory!.Name</td>
-                    <td>
-                        @if (item.ActivityType == InventoryTransactionType.PurchaseInventory)
-                        {
-                            <text>入库</text>
-                        }
-                        else
-                        {
-                            <text>出库</text>
-                        }
-                    </td>
-                    <td>@item.QuantityBefore</td>
-                    <td>@item.QuantityAfter</td>
-                    <td>@item.OrderNumber</td>
-                    <td>@item.ProductionNumber</td>
+                    <th>交易日期</th>
+                    <th>物料名称</th>
+                    <th>交易类型</th>
+                    <th>交易前库存数量</th>
+                    <th>交易后库存数量</th>
+                    <th>采购编号</th>
+                    <th>生产编号</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
+            </thead>
+            <tbody>
+                @foreach (var item in inventoryTransactions)
+                {
+                    <tr>
+                        <td>@item.TransactionDate.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                        <td>@item.Inventory!.Name</td>
+                        <td>
+                            @if (item.ActivityType == InventoryTransactionType.PurchaseInventory)
+                            {
+                                <text>入库</text>
+                            }
+                            else
+                            {
+                                <text>出库</text>
+                            }
+                        </td>
+                        <td>@item.QuantityBefore</td>
+                        <td>@item.QuantityAfter</td>
+                        <td>@item.OrderNumber</td>
+                        <td>@item.ProductionNumber</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+
+</div>
 
 @code {
     private string inventoryName = string.Empty;
@@ -97,5 +106,10 @@
 
         inventoryTransactions = await SearchInventoryTransactionsUseCase.ExecuteAsync(
             inventoryName, dateFrom, dateTo, activityType);
+    }
+
+    private async Task Print()
+    {
+        await JSRuntime.InvokeVoidAsync("print");
     }
 }
