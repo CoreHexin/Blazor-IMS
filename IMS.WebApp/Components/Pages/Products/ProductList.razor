@@ -3,13 +3,13 @@
 @using IMS.WebApp.Components.Controls
 @using IMS.WebApp.Components.Controls.Products
 
-<h3>Product List</h3>
+<h3>产品管理</h3>
 
 <SearchComponent SearchCallback="OnSearch" />
 
 <ProductListComponent NameForSearch="@nameForSearch" />
 
-<a href="/product/add" class="btn btn-primary">Add Product</a>
+<a href="/product/add" class="btn btn-primary">添加产品</a>
 
 @code {
     private string nameForSearch = string.Empty;

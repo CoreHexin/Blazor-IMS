@@ -14,34 +14,30 @@
 @inject IViewProductByIdUseCase ViewProductByIdUseCase
 @inject IJSRuntime JSRuntime
 
-<h3>Sell Product</h3>
+<h3>产品销售</h3>
 
 <EditForm id="sell-form" Model="sellViewModel" OnValidSubmit="Sell">
     <DataAnnotationsValidator />
 
     <div class="form-group mb-3">
-        <label for="orderNumber">Order Number</label>
+        <label for="orderNumber">订单编号</label>
         <InputText id="orderNumber" @bind-Value=sellViewModel.OrderNumber class="form-control" />
         <ValidationMessage For="() => sellViewModel.OrderNumber" />
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="form-group">
-                <AutoCompleteComponent Label="Product to Produce" SearchFunction="SearchProduct" SelectedCallback="OnSelected" />
-                <ValidationMessage For="() => sellViewModel.ProductId" />
-            </div>
-        </div>
+    <div class="form-group mb-3">
+        <AutoCompleteComponent Label="选择产品" SearchFunction="SearchProduct" SelectedCallback="OnSelected" />
+        <ValidationMessage For="() => sellViewModel.ProductId" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="quantity">Quantity</label>
+        <label for="quantity">数量</label>
         <InputNumber id="quantity" @bind-Value=sellViewModel.QuantityToSell class="form-control" />
         <ValidationMessage For="() => sellViewModel.QuantityToSell" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="price">Price</label>
+        <label for="price">单价</label>
         <InputNumber id="price" @bind-Value=sellViewModel.UnitPrice class="form-control" />
         <ValidationMessage For="() => sellViewModel.UnitPrice" />
     </div>

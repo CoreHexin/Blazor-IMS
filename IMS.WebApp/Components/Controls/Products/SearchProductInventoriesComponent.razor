@@ -43,7 +43,6 @@
 
     private async Task Search()
     {
-        // await Task.Delay(200);  // 模拟耗时操作
         inventories = (await ViewInventoriesByNameUseCase.ExecuteAsync(NameForSearch)).ToList();
         StateHasChanged();
     }

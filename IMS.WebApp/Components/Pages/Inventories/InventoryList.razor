@@ -1,15 +1,16 @@
 ﻿@page "/inventories"
 
+
 @using IMS.WebApp.Components.Controls
 @using IMS.WebApp.Components.Controls.Inventories
 
-<h3>InventoryList</h3>
+<h3>物料管理</h3>
 
 <SearchComponent SearchCallback="OnSearch" />
 
 <InventoryListComponent NameForSearch="@nameForSearch" />
 
-<a href="/inventory/add" class="btn btn-dark">Add Inventory</a>
+<a href="/inventory/add" class="btn btn-dark">添加物料</a>
 
 @code {
     private string nameForSearch = string.Empty;

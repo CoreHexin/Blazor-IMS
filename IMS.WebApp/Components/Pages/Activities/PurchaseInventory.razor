@@ -13,7 +13,7 @@
 @inject IPurchaseInventoryUseCase PurchaseInventoryUseCase
 @inject IJSRuntime JSRuntime
 
-<h3>物料采购</h3>
+<h3 class="mb-3">物料采购</h3>
 
 <EditForm id="purchase-form" Model="purchaseViewModel" OnValidSubmit="Purchase">
     <DataAnnotationsValidator />
@@ -24,20 +24,16 @@
         <ValidationMessage For="() => purchaseViewModel.OrderNumber" />
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="form-group">
-                <AutoCompleteComponent 
-                Label="采购物料名称"
-                SearchFunction="SearchInventory"
-                SelectedCallback="OnSelected" />
-                @if (purchaseViewModel.InventoryPrice > 0)
-                {
-                    <text>Price:</text>
-                    @purchaseViewModel.InventoryPrice.ToString("c")
-                }
-            </div>
-        </div>
+    <div class="form-group mb-3">
+        <AutoCompleteComponent 
+        Label="选择物料"
+        SearchFunction="SearchInventory"
+        SelectedCallback="OnSelected" />
+        @if (purchaseViewModel.InventoryPrice > 0)
+        {
+            <text>Price:</text>
+            @purchaseViewModel.InventoryPrice.ToString("c")
+        }
     </div>
 
     <div class="form-group mb-3">

@@ -13,28 +13,24 @@
 @inject IViewProductByIdUseCase ViewProductByIdUseCase
 @inject IJSRuntime JSRuntime
 
-<h3>Produce Product</h3>
+<h3>产品生产</h3>
 
 <EditForm id="produce-form" Model="produceViewModel" OnValidSubmit="Produce">
     <DataAnnotationsValidator />
 
     <div class="form-group mb-3">
-        <label for="productionNumber">Production Number</label>
+        <label for="productionNumber">生产编号</label>
         <InputText id="productionNumber" @bind-Value=produceViewModel.ProductionNumber class="form-control" />
         <ValidationMessage For="() => produceViewModel.ProductionNumber" />
     </div>
 
-    <div class="card mb-3">
-        <div class="card-body">
-            <div class="form-group">
-                <AutoCompleteComponent Label="Product to Produce" SearchFunction="SearchProduct" SelectedCallback="OnSelected" />
-                <ValidationMessage For="() => produceViewModel.ProductId" />
-            </div>
-        </div>
+    <div class="form-group mb-3">
+        <AutoCompleteComponent Label="选择产品" SearchFunction="SearchProduct" SelectedCallback="OnSelected" />
+        <ValidationMessage For="() => produceViewModel.ProductId" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="quantity">Quantity</label>
+        <label for="quantity">数量</label>
         <InputNumber id="quantity" @bind-Value=produceViewModel.QuantityToProduce class="form-control" />
         <ValidationMessage For="() => produceViewModel.QuantityToProduce" />
     </div>

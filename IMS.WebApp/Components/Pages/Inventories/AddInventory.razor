@@ -2,44 +2,52 @@
 
 @using IMS.CoreBusiness
 @using IMS.UseCases.Inventories.Interfaces
+@using IMS.WebApp.ViewModels
 
 @inject IAddInventoryUseCase AddInventoryUserCase
 @inject NavigationManager NavigationManager
 
-<h3>Add Inventory</h3>
+<h3>添加物料</h3>
 
-<EditForm Model="Inventory" FormName="addInventoryForm" OnValidSubmit="Add">
+<EditForm Model="inventoryViewModel" FormName="addinventoryViewModelForm" OnValidSubmit="Add">
     <DataAnnotationsValidator />
 
     <div class="form-group mb-3">
-        <label for="name">Inventory Name</label>
-        <InputText id="name" @bind-Value=Inventory.Name class="form-control" />
-        <ValidationMessage For="() => Inventory.Name" />
+        <label for="name">物料名称</label>
+        <InputText id="name" @bind-Value=inventoryViewModel.Name class="form-control" />
+        <ValidationMessage For="() => inventoryViewModel.Name" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="quantity">Quantity</label>
-        <InputNumber id="quantity" @bind-Value=Inventory.Quantity class="form-control" />
-        <ValidationMessage For="() => Inventory.Quantity" />
+        <label for="quantity">数量</label>
+        <InputNumber id="quantity" @bind-Value=inventoryViewModel.Quantity class="form-control" />
+        <ValidationMessage For="() => inventoryViewModel.Quantity" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="price">Price</label>
-        <InputNumber id="price" @bind-Value=Inventory.Price class="form-control" />
-        <ValidationMessage For="() => Inventory.Price" />
+        <label for="price">单价</label>
+        <InputNumber id="price" @bind-Value=inventoryViewModel.Price class="form-control" />
+        <ValidationMessage For="() => inventoryViewModel.Price" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Add</button>
-    <a href="/inventories" class="btn btn-primary">Cancel</a>
+    <button type="submit" class="btn btn-primary">添加</button>
+    <a href="/inventories" class="btn btn-primary">取消</a>
 </EditForm>
 
 @code {
     [SupplyParameterFromForm]
-    public Inventory Inventory { get; set; } = new Inventory();
+    private InventoryViewModel inventoryViewModel { get; set; } = new InventoryViewModel();
 
     private async Task Add()
     {
-        await AddInventoryUserCase.ExecuteAsync(Inventory);
+        var inventory = new Inventory
+        {
+            Id = inventoryViewModel.Id,
+            Name = inventoryViewModel.Name,
+            Quantity = inventoryViewModel.Quantity,
+            Price = inventoryViewModel.Price
+        };
+        await AddInventoryUserCase.ExecuteAsync(inventory);
         NavigationManager.NavigateTo("/inventories");
     }
 }

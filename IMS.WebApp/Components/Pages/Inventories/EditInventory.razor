@@ -2,40 +2,41 @@
 
 @using IMS.CoreBusiness
 @using IMS.UseCases.Inventories.Interfaces
+@using IMS.WebApp.ViewModels
 
 @inject IViewInventoryByIdUseCase ViewInventoryByIdUseCase
 @inject IEditInventoryUseCase EditInventoryUseCase
 @inject NavigationManager NavigationManager
 
-<h3>Edit Inventory @Id</h3>
+<h3>编辑物料</h3>
 
-@if (_inventory is not null)
+@if (inventoryViewModel is not null)
 {
-    <EditForm Model="_inventory" FormName="updateInventoryForm" OnValidSubmit="UpdateInventory">
+    <EditForm Model="inventoryViewModel" FormName="updateInventoryForm" OnValidSubmit="UpdateInventory">
         <DataAnnotationsValidator />
 
-        <InputNumber @bind-Value=_inventory.Id hidden />
+        <InputNumber @bind-Value=inventoryViewModel.Id hidden />
 
         <div class="form-group mb-3">
-            <label for="name">Inventory Name</label>
-            <InputText id="name" @bind-Value=_inventory.Name class="form-control" />
-            <ValidationMessage For="() => _inventory.Name" />
+            <label for="name">物料名称</label>
+            <InputText id="name" @bind-Value=inventoryViewModel.Name class="form-control" />
+            <ValidationMessage For="() => inventoryViewModel.Name" />
         </div>
 
         <div class="form-group mb-3">
-            <label for="quantity">Quantity</label>
-            <InputNumber id="quantity" @bind-Value=_inventory.Quantity class="form-control" />
-            <ValidationMessage For="() => _inventory.Quantity" />
+            <label for="quantity">数量</label>
+            <InputNumber id="quantity" @bind-Value=inventoryViewModel.Quantity class="form-control" />
+            <ValidationMessage For="() => inventoryViewModel.Quantity" />
         </div>
 
         <div class="form-group mb-3">
-            <label for="price">Price</label>
-            <InputNumber id="price" @bind-Value=_inventory.Price class="form-control" />
-            <ValidationMessage For="() => _inventory.Price" />
+            <label for="price">价格</label>
+            <InputNumber id="price" @bind-Value=inventoryViewModel.Price class="form-control" />
+            <ValidationMessage For="() => inventoryViewModel.Price" />
         </div>
 
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="/inventories" class="btn btn-primary">Cancel</a>
+        <button type="submit" class="btn btn-primary">更新</button>
+        <a href="/inventories" class="btn btn-primary">取消</a>
     </EditForm>
 }
 
@@ -44,18 +45,40 @@
     public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    private Inventory? _inventory { get; set; }
+    private InventoryViewModel? inventoryViewModel { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        _inventory ??= await ViewInventoryByIdUseCase.ExecuteAsync(Id);
+        if (inventoryViewModel is null)
+        {
+            var inventory = await ViewInventoryByIdUseCase.ExecuteAsync(Id);
+            if (inventory is null)
+                return;
+
+            inventoryViewModel = new InventoryViewModel
+            {
+                Id = inventory.Id,
+                Name = inventory.Name,
+                Quantity = inventory.Quantity,
+                Price = inventory.Price
+            };
+        }
+
     }
 
     private async Task UpdateInventory()
     {
-        if (_inventory is not null)
+        if (inventoryViewModel is not null)
         {
-            await EditInventoryUseCase.ExecuteAsync(_inventory);
+            var inventory = new Inventory
+            {
+                Id = inventoryViewModel.Id,
+                Name = inventoryViewModel.Name,
+                Quantity = inventoryViewModel.Quantity,
+                Price = inventoryViewModel.Price
+            };
+
+            await EditInventoryUseCase.ExecuteAsync(inventory);
             NavigationManager.NavigateTo("/inventories");
         }
     }

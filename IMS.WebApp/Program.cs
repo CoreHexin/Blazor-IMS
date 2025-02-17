@@ -1,5 +1,4 @@
 using IMS.Plugins.EFCoreSqlServer;
-using IMS.Plugins.InMemory;
 using IMS.UseCases.Activities;
 using IMS.UseCases.Activities.Interfaces;
 using IMS.UseCases.Inventories;
@@ -20,10 +19,10 @@ builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddDbContextFactory<IMSDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("IMS")));
 
-builder.Services.AddSingleton<IInventoryRepository, InventoryRepository>();
-builder.Services.AddSingleton<IProductRepository, ProductRepository>();
-builder.Services.AddSingleton<IInventoryTransactionRepository, InventoryTransactionRepository>();
-builder.Services.AddSingleton<IProductTransactionRepository, ProductTransactionRepository>();
+builder.Services.AddTransient<IInventoryRepository, InventoryEFCoreRepository>();
+builder.Services.AddTransient<IProductRepository, ProductEFCoreRepository>();
+builder.Services.AddTransient<IInventoryTransactionRepository, InventoryTransactionEFCoreRepository>();
+builder.Services.AddTransient<IProductTransactionRepository, ProductTransactionEFCoreRepository>();
 
 builder.Services.AddTransient<IViewInventoriesByNameUseCase, ViewInventoriesByNameUseCase>();
 builder.Services.AddTransient<IAddInventoryUseCase, AddInventoryUseCase>();

@@ -8,37 +8,37 @@
 @inject NavigationManager NavigationManager
 @inject IAddProductUseCase AddProductUseCase
 
-<h3>Add Product</h3>
+<h3>添加产品</h3>
 
 <EditForm Model="product" OnValidSubmit="Save">
     <DataAnnotationsValidator />
 
     <div class="form-group mb-3">
-        <label for="name">Product Name</label>
+        <label for="name">产品名称</label>
         <InputText id="name" @bind-Value=product.Name class="form-control" />
         <ValidationMessage For="() => product.Name" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="quantity">Quantity</label>
+        <label for="quantity">数量</label>
         <InputNumber id="quantity" @bind-Value=product.Quantity class="form-control" />
         <ValidationMessage For="() => product.Quantity" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="price">Price</label>
+        <label for="price">单价</label>
         <InputNumber id="price" @bind-Value=product.Price class="form-control" />
         <ValidationMessage For="() => product.Price" />
         <ValidationMessage For="() => product.ProductInventories" />
     </div>
 
     <div class="form-group mb-3">
-        <label for="price">Inventories</label>
+        <label for="price">选择物料</label>
         <ProductInventoriesComponent Product="product" />
     </div>
 
-    <button type="submit" class="btn btn-primary">Add</button>
-    <a href="/products" class="btn btn-primary">Cancel</a>
+    <button type="submit" class="btn btn-primary">添加</button>
+    <a href="/products" class="btn btn-primary">取消</a>
 </EditForm>
 
 
