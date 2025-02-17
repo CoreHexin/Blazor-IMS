@@ -1,4 +1,5 @@
 ﻿using IMS.CoreBusiness.Validations;
+using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 namespace IMS.CoreBusiness
@@ -14,7 +15,8 @@ namespace IMS.CoreBusiness
         [Range(0, int.MaxValue, ErrorMessage = "数量必须大于等于0")]
         public int Quantity { get; set; }
 
-        [Range(0, int.MaxValue, ErrorMessage = "单价必须大于等于0")]
+        [Range(0, 9999999999999999.99, ErrorMessage = "单价必须大于等于0")]
+        [Precision(18, 2)]
         public decimal Price { get; set; }
 
         [Product_EnsurePriceIsGreaterThanInventoriesCost]
