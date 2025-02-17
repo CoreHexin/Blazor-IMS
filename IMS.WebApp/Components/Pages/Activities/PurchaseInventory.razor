@@ -25,13 +25,10 @@
     </div>
 
     <div class="form-group mb-3">
-        <AutoCompleteComponent 
-        Label="选择物料"
-        SearchFunction="SearchInventory"
-        SelectedCallback="OnSelected" />
+        <AutoCompleteComponent Label="选择物料" SearchFunction="SearchInventory" SelectedCallback="OnSelected" />
         @if (purchaseViewModel.InventoryPrice > 0)
         {
-            <text>Price:</text>
+            <text>单价:</text>
             @purchaseViewModel.InventoryPrice.ToString("c")
         }
     </div>

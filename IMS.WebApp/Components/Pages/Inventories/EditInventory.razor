@@ -1,8 +1,8 @@
 ﻿@page "/inventory/edit/{id:int}"
+@rendermode InteractiveServer
 
 @using IMS.CoreBusiness
 @using IMS.UseCases.Inventories.Interfaces
-@using IMS.WebApp.ViewModels
 
 @inject IViewInventoryByIdUseCase ViewInventoryByIdUseCase
 @inject IEditInventoryUseCase EditInventoryUseCase
@@ -10,29 +10,29 @@
 
 <h3>编辑物料</h3>
 
-@if (inventoryViewModel is not null)
+@if (inventory is not null)
 {
-    <EditForm Model="inventoryViewModel" FormName="updateInventoryForm" OnValidSubmit="UpdateInventory">
+    <EditForm Model="inventory" OnValidSubmit="UpdateInventory">
         <DataAnnotationsValidator />
 
-        <InputNumber @bind-Value=inventoryViewModel.Id hidden />
+        <InputNumber @bind-Value=inventory.Id hidden />
 
         <div class="form-group mb-3">
             <label for="name">物料名称</label>
-            <InputText id="name" @bind-Value=inventoryViewModel.Name class="form-control" />
-            <ValidationMessage For="() => inventoryViewModel.Name" />
+            <InputText id="name" @bind-Value=inventory.Name class="form-control" />
+            <ValidationMessage For="() => inventory.Name" />
         </div>
 
         <div class="form-group mb-3">
             <label for="quantity">数量</label>
-            <InputNumber id="quantity" @bind-Value=inventoryViewModel.Quantity class="form-control" />
-            <ValidationMessage For="() => inventoryViewModel.Quantity" />
+            <InputNumber id="quantity" @bind-Value=inventory.Quantity class="form-control" />
+            <ValidationMessage For="() => inventory.Quantity" />
         </div>
 
         <div class="form-group mb-3">
             <label for="price">价格</label>
-            <InputNumber id="price" @bind-Value=inventoryViewModel.Price class="form-control" />
-            <ValidationMessage For="() => inventoryViewModel.Price" />
+            <InputNumber id="price" @bind-Value=inventory.Price class="form-control" />
+            <ValidationMessage For="() => inventory.Price" />
         </div>
 
         <button type="submit" class="btn btn-primary">更新</button>
@@ -44,40 +44,20 @@
     [Parameter]
     public int Id { get; set; }
 
-    [SupplyParameterFromForm]
-    private InventoryViewModel? inventoryViewModel { get; set; }
+    private Inventory? inventory { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
-        if (inventoryViewModel is null)
+        if (inventory is null)
         {
-            var inventory = await ViewInventoryByIdUseCase.ExecuteAsync(Id);
-            if (inventory is null)
-                return;
-
-            inventoryViewModel = new InventoryViewModel
-            {
-                Id = inventory.Id,
-                Name = inventory.Name,
-                Quantity = inventory.Quantity,
-                Price = inventory.Price
-            };
+            inventory = await ViewInventoryByIdUseCase.ExecuteAsync(Id);
         }
-
     }
 
     private async Task UpdateInventory()
     {
-        if (inventoryViewModel is not null)
+        if (inventory is not null)
         {
-            var inventory = new Inventory
-            {
-                Id = inventoryViewModel.Id,
-                Name = inventoryViewModel.Name,
-                Quantity = inventoryViewModel.Quantity,
-                Price = inventoryViewModel.Price
-            };
-
             await EditInventoryUseCase.ExecuteAsync(inventory);
             NavigationManager.NavigateTo("/inventories");
         }

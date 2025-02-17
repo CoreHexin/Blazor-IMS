@@ -1,17 +1,9 @@
-﻿@if (NameForSearch is null)
-{
-    NameForSearch = string.Empty;
-}
-
-<EditForm Enhance="true" Model="NameForSearch" FormName="formForSearch" OnSubmit="Search" class="mb-3">
-    <div class="input-group">
-        <InputText class="form-control" placeholder="输入查询名称" @bind-Value=NameForSearch />
-        <button type="submit" class="btn-success input-group-text">查询</button>
-    </div>
-</EditForm>
+﻿<div class="input-group mb-3">
+    <input class="form-control" placeholder="输入查询名称" @bind-value=NameForSearch @onkeyup=OnKeyUp />
+    <button type="button" class="btn btn-primary" @onclick=Search>查询</button>
+</div>
 
 @code {
-    [SupplyParameterFromForm]
     private string NameForSearch { get; set; } = string.Empty;
 
     [Parameter]
@@ -20,5 +12,14 @@
     private void Search() 
     {
         SearchCallback.InvokeAsync(NameForSearch);
+    }
+
+    private void OnKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Code == "Enter" || e.Code == "NumpadEnter")
+        {
+            Search();
+        }
+
     }
 }

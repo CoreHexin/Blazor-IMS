@@ -45,8 +45,11 @@
         get { return _userInput; }
         set 
         { 
-            _userInput = value;
-            ViewItemsAsync();
+            if (value != _userInput)
+            {
+                _userInput = value;
+                ViewItemsAsync();
+            }
         }
     }
 
@@ -55,13 +58,13 @@
         if (!string.IsNullOrWhiteSpace(_userInput) && SearchFunction is not null)
         {
             searchResults = await SearchFunction(_userInput);
-            StateHasChanged();
         }
         else
         {
             await SelectedCallback.InvokeAsync(null);
             ClearHightlighting();
         }
+        StateHasChanged();
     }
 
     public class ItemViewModel
@@ -75,7 +78,8 @@
         if (item is not null)
         {
             selectedItem = item;
-            UserInput = item.Name ?? string.Empty;    
+            _userInput = item.Name;
+            UserInput = item.Name;    
             SelectedCallback.InvokeAsync(item);
         }
 
