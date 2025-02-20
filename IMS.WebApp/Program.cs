@@ -36,7 +36,7 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Admin", policy => policy.RequireClaim("Department", "Administration"));
-    options.AddPolicy("Inventory", policy => policy.RequireClaim("Department", "InventoryManagerment"));
+    options.AddPolicy("Inventory", policy => policy.RequireClaim("Department", "InventoryManagement"));
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

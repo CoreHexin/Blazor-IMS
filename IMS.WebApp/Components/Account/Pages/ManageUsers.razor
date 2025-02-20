@@ -1,0 +1,42 @@
+﻿@page "/Account/ManageUsers"
+
+@attribute [Authorize(Policy = "Admin")]
+
+@using IMS.WebApp.Data
+
+@inject UserManager<ApplicationUser> UserManager
+
+<h3>用户管理</h3>
+
+@if (users is not null && users.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>邮箱</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        <a href="/account/manageuser/@user.Id" class="btn btn-link">管理</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<ApplicationUser>? users;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitializedAsync();
+        users = UserManager.Users.ToList();
+    }
+}
