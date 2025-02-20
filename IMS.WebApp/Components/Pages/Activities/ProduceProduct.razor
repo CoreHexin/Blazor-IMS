@@ -1,5 +1,6 @@
 ﻿@page "/produce"
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 @using IMS.CoreBusiness
 @using IMS.UseCases.Activities.Interfaces
@@ -12,6 +13,7 @@
 @inject IViewProductsByNameUseCase ViewProductsByNameUseCase
 @inject IViewProductByIdUseCase ViewProductByIdUseCase
 @inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <h3>产品生产</h3>
 
@@ -44,6 +46,13 @@
 
     private Product? selectedProduct;
 
+    private AuthenticationState? authenticationState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    }
+
     protected override void OnAfterRender(bool firstRender)
     {
         base.OnAfterRender(firstRender);
@@ -56,11 +65,25 @@
 
     private async Task Produce()
     {
+        if (authenticationState is null || 
+            authenticationState.User is null || 
+            authenticationState.User.Identity is null)
+        {
+            return;
+        }
+
+        if (!authenticationState.User.Identity.IsAuthenticated)
+        {
+            return;
+        }
+
+        string userName = authenticationState.User.Identity.Name!;
+
         await ProduceProductUseCase.ExecuteAsync(
             produceViewModel.ProductionNumber, 
             selectedProduct, 
             produceViewModel.QuantityToProduce, 
-            "hexin"
+            userName
         );
 
         produceViewModel = new ProduceViewModel();

@@ -1,5 +1,6 @@
 ﻿@page "/inventory/edit/{id:int}"
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 @using IMS.CoreBusiness
 @using IMS.UseCases.Inventories.Interfaces

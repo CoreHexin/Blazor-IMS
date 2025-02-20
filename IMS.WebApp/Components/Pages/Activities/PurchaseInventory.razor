@@ -1,5 +1,6 @@
 ﻿@page "/purchase"
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 @using IMS.CoreBusiness
 @using IMS.UseCases.Activities.Interfaces
@@ -12,6 +13,7 @@
 @inject IViewInventoryByIdUseCase ViewInventoryByIdUseCase
 @inject IPurchaseInventoryUseCase PurchaseInventoryUseCase
 @inject IJSRuntime JSRuntime
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <h3 class="mb-3">物料采购</h3>
 
@@ -47,6 +49,13 @@
     private PurchaseViewModel purchaseViewModel = new PurchaseViewModel();
 
     private Inventory? selectedInventory = null;
+
+    private AuthenticationState? authenticationState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        authenticationState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+    }
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -88,11 +97,25 @@
 
     private void Purchase()
     {
+        if (authenticationState is null ||
+            authenticationState.User is null ||
+            authenticationState.User.Identity is null)
+        {
+            return;
+        }
+
+        if (!authenticationState.User.Identity.IsAuthenticated)
+        {
+            return;
+        }
+
+        string userName = authenticationState.User.Identity.Name!;
+
         PurchaseInventoryUseCase.ExecuteAsync(
             purchaseViewModel.OrderNumber,
             selectedInventory,
             purchaseViewModel.QuantityToPurchase, 
-            "hexin"
+            userName
         );
 
         purchaseViewModel = new PurchaseViewModel();
