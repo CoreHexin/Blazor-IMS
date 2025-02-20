@@ -33,6 +33,12 @@ builder.Services.AddAuthentication(options =>
 })
     .AddIdentityCookies();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Admin", policy => policy.RequireClaim("Department", "Administration"));
+    options.AddPolicy("Inventory", policy => policy.RequireClaim("Department", "InventoryManagerment"));
+});
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("IMSAuth")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
